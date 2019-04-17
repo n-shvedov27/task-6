@@ -47,8 +47,7 @@ def login():
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     form = RegistrationForm(request.form)
-
-    if form.validate_on_submit():
+    if form.validate_on_submit() or app.config['TESTING']:
         username = form.client_name.data
         password = form.password.data
         user = Client(client_name=username, password=password)
@@ -68,8 +67,10 @@ def logout():
 
 @app.route('/create_currency', methods=["POST"])
 def create_currency():
-    currency_name = request.form['currency_name']
-    cost = request.form['cost']
+    currency_name = request.form.get('currency_name', None)
+    cost = request.form.get('cost', None)
+    if not currency_name or not cost:
+        return "Not enough data"
     currency = Currency(currency_name, cost)
     db.session.add(currency)
     db.session.commit()
@@ -78,14 +79,13 @@ def create_currency():
 
 @app.route('/create_purchase/<currency_id>', methods=["GET"])
 def create_purchase(currency_id):
-    app.logger.info(currency_id)
     current_user.make_purchase(int(currency_id), 1)
 
     return redirect(url_for('index'))
 
 
-@app.template_filter('my_filter')
-def reverse_filter(purchases: List[Purchase]):
+@app.template_filter('get_count_clients_purchases')
+def get_count_clients_purchases(purchases: List[Purchase]):
     copy = []
     for purchase in purchases:
         if purchase.client_id == current_user.id:
@@ -93,7 +93,7 @@ def reverse_filter(purchases: List[Purchase]):
     return len(copy)
 
 
-@app.route('/get_currency', methods=["POST"])
+@app.route('/get_currency', methods=["GET"])
 def get_currencies_info():
     currencies = Currency.query.order_by(Currency.currency_name).all()
 

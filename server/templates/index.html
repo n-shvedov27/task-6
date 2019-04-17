@@ -17,7 +17,7 @@
             setInterval(function () {
                 $.ajax({
                     url: "/get_currency",
-                    type: "POST",
+                    type: "GET",
                     data: ({}),
                     success: function (response) {
                         $('#for_cur').empty()
