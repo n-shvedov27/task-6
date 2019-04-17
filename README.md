@@ -11,6 +11,7 @@
 * Установка базы данных из докера
 
     `$ docker-compose up -d`
+    
     `$ docker exec -it task6 psql -U postgres -c "create database task6"`
 * Запуск сервера:
  
