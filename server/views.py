@@ -77,20 +77,22 @@ def create_currency():
     return "Sucses"
 
 
-@app.route('/create_purchase/<currency_id>', methods=["GET"])
+@app.route('/create_purchase/<currency_id>')
 def create_purchase(currency_id):
-    current_user.make_purchase(int(currency_id), 1)
-
+    response = current_user.make_purchase(int(currency_id), 1)
+    if response == 404:
+        return "Currency not found"
+    if response == 402:
+        return "Not enough money"
     return redirect(url_for('index'))
 
 
 @app.template_filter('get_count_clients_purchases')
 def get_count_clients_purchases(purchases: List[Purchase]):
-    copy = []
     for purchase in purchases:
         if purchase.client_id == current_user.id:
-            copy.append(purchase)
-    return len(copy)
+            return purchase.count
+    return 0
 
 
 @app.route('/get_currency', methods=["GET"])
@@ -109,6 +111,13 @@ def update_currency_cost():
         db.session.commit()
 
 
-update_currency_process = Process(target=update_currency_cost)
+@app.route('/delete_purchase/<currency_id>')
+def delete_purchase(currency_id):
+    response = current_user.delete_purchase(currency_id)
+    if response == 404:
+        return "Purchase not exist. Please, buy currency"
+    return redirect(url_for('index'))
 
+
+update_currency_process = Process(target=update_currency_cost)
 update_currency_process.start()
