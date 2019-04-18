@@ -37,7 +37,3 @@ def test_registration(app, testing_db):
 
         assert 'nik' in str(list(currencies)[0])
         assert response.status_code == HTTPStatus.FOUND
-
-
-def test_routing(client):
-    pass
