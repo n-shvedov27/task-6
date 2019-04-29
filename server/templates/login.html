@@ -1,0 +1,16 @@
+<h1>Login</h1>
+
+<div>
+    {% for message in get_flashed_messages() %}
+        {{ message }}
+    {% endfor %}
+</div>
+
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.client_name.label }} {{ form.client_name() }}
+    {{ form.password.label }} {{ form.password() }}
+    {{ form.submit.label }}{{ form.submit() }}
+</form>
+

@@ -1,0 +1,36 @@
+{% if current_user.is_authenticated %}
+    <h1>{{ current_user.client_name }}</h1>
+    <h1>{{ current_user.balance }}</h1>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+    <a href="{{ url_for('logout') }}">Logout</a>
+    <div id="for_cur">
+
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            setInterval(function () {
+                $.ajax({
+                    url: "/get_currency",
+                    type: "GET",
+                    data: ({}),
+                    success: function (response) {
+                        $('#for_cur').empty()
+                        $('#for_cur').append(response.data)
+                    }
+                });
+            }, 500);
+        })
+    </script>
+{% else %}
+    <a href="{{ url_for('login') }}">Login</a>
+    <a href="{{ url_for('register') }}">Register</a>
+{% endif %}
+<br>
+<br>

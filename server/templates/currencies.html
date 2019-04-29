@@ -1,0 +1,6 @@
+{% for currency in currencies %}
+    <p>Валюта {{ currency.currency_name }}. Стоимость {{ currency.cost }}
+        <a href="/create_purchase/{{ currency.id }}">Купить</a>
+        <a href="/delete_purchase/{{ currency.id }}">Продать</a>
+        Куплено: {{ currency.purchases |  get_count_clients_purchases }}</p>
+{% endfor %}

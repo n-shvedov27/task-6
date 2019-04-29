@@ -1,0 +1,22 @@
+<h1>Sign up for a new user account</h1>
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+    {% if form.client_name.errors %}
+        <ul class="errors">{% for error in form.client_name.errors %}
+            <li>{{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+    {{ form.client_name.label }} {{ form.client_name() }}
+    {% if form.password.errors %}
+        <ul class="errors">{% for error in form.password.errors %}
+            <li>{{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+    {{ form.password.label }} {{ form.password() }}
+
+    {% if form.password2.errors %}
+        <ul class="errors">{% for error in form.password2.errors %}
+            <li>{{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+    {{ form.password2.label }} {{ form.password2() }}
+    {{ form.submit.label }}{{ form.submit() }}
+</form>
